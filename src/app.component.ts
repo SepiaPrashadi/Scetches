@@ -172,24 +172,28 @@ export class App implements OnInit, AfterViewInit {
       { id: 'f', x: col3, align: 'center' }       
     ];
 
+    // Main container reference for coordinate calculation
+    const mainContainerEl = this.mainContainer()?.nativeElement;
+    if (!mainContainerEl || typeof document === 'undefined') return '0,0';
+    
+    const mainRect = mainContainerEl.getBoundingClientRect();
+
     return pathLayout.map(point => {
-      // Safety check for document
-      if (typeof document === 'undefined') return '0,0';
-      
       const element = document.getElementById('node-' + point.id);
       if (!element) {
         return `0,0`;
       }
       
       const rect = element.getBoundingClientRect();
-      const parentRect = element.parentElement?.getBoundingClientRect() || { top: 0 };
       
       let yOffset = rect.height / 2;
       if (point.align === 'bottom') {
         yOffset = rect.height; 
       }
       
-      const y = (rect.top - parentRect.top) + yOffset + 20; 
+      // Calculate Y relative to the main container (SVG host), not the parent element
+      const y = (rect.top - mainRect.top) + yOffset;
+      
       return `${point.x},${y}`;
     }).join(' ');
   });
