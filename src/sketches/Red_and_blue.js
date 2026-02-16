@@ -1,6 +1,6 @@
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    background(255, 48, 190)
+    background(6, 48, 190)
 }
 
 function draw() {
@@ -23,7 +23,7 @@ function draw() {
     line(mouseX+4, mouseY+8, windowWidth/1.7,windowHeight/1.7,0,0);
 
     strokeWeight(12)
-    line(mouseX+4,mouseY+4,mouseX+4,mouseY+4);
+    line(mouseX+4,mouseY+4,mouseX+4,mouseX+4);
 
 //pink
     stroke(242, 63, 149)
