@@ -22,6 +22,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*.js",
+                "input": "src/sketches",
+                "output": "/sketches"
               }
             ],
             "styles": [

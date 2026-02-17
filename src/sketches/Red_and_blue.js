@@ -1,6 +1,6 @@
 function setup() {
-    createCanvas(windowWidth, windowHeight);
-    background(6, 48, 190)
+    createCanvas(1240, 620);
+    background(20, 48, 190)
 }
 
 function draw() {
@@ -22,7 +22,7 @@ function draw() {
 //orange
     line(mouseX+4, mouseY+8, windowWidth/1.7,windowHeight/1.7,0,0);
 
-    strokeWeight(12)
+    strokeWeight(6)
     line(mouseX+4,mouseY+4,mouseX+4,mouseX+4);
 
 //pink

@@ -93,7 +93,13 @@
                     [style.height.px]="item.nativeHeight + navbarOffset + 20">
 
                       @if (item.id === 'c' || item.id === 'b') {
-                          <app-p5-sketch [sketch]="sketchC" [width]="item.nativeWidth" [height]="item.nativeHeight"></app-p5-sketch>
+                          @if (sketchC()) {
+                            <app-p5-sketch [sketch]="sketchC()!" [width]="item.nativeWidth" [height]="item.nativeHeight"></app-p5-sketch>
+                          }
+                      } @else if (item.id === 'e') {
+                          @if (sketchE()) {
+                              <app-p5-sketch [sketch]="sketchE()!" [width]="item.nativeWidth" [height]="item.nativeHeight"></app-p5-sketch>
+                          }
                       } @else {
                           <iframe
                                   [src]="item.safeUrl"

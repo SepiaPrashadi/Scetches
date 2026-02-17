@@ -1,6 +1,7 @@
 import { Component, computed, ChangeDetectionStrategy, inject, signal, HostListener, OnInit, ElementRef, viewChild, AfterViewInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { P5SketchComponent } from './p5-sketch.component';
+import { SketchLoaderService } from './sketch-loader.service';
 
 interface ArtSketch {
   id: string;
@@ -46,39 +47,11 @@ type FilterRatio = 'ALL' | 'SQUARE' | 'LANDSCAPE';
 })
 export class App implements OnInit, AfterViewInit {
   private sanitizer = inject(DomSanitizer);
+  private sketchLoader = inject(SketchLoaderService);
 
-  // P5.js sketch for Red and Blue
-  readonly sketchC = (p: any) => {
-    p.setup = () => {
-      p.background(255, 48, 190);
-    };
-
-    p.draw = () => {
-      p.stroke(242, 63, 190);
-      p.strokeWeight(12);
-      p.line(p.mouseX+4, p.mouseY+4, p.mouseX, p.mouseY);
-
-      p.strokeWeight(2);
-      p.stroke(255, 137, 87);
-      p.line(p.mouseX+4, p.mouseY+8, p.width/1.7, p.height/1.7, 0, 0);
-
-      p.strokeWeight(12);
-      p.line(p.mouseX+4, p.mouseY+4, p.mouseX+4, p.mouseY+4);
-
-      p.stroke(242, 63, 149);
-      p.strokeWeight(1);
-      p.line(p.mouseX, p.mouseY, p.width/1.7, p.height/1.7, 0, 0);
-      p.strokeWeight(8);
-      p.stroke(255, 0, 0);
-      p.line(p.mouseX+2, p.mouseY+2, p.mouseX+2, p.mouseY+2);
-
-      p.stroke(81, 232, 243);
-      p.strokeWeight(2);
-      p.line(600, p.height, p.width/1.7, p.mouseY, 0, 0);
-      p.strokeWeight(4);
-      p.line(p.mouseX, p.mouseY, p.mouseX, p.mouseY);
-    };
-  };
+  // P5.js sketch for Red and Blue - loaded dynamically from external file
+  sketchC = signal<((p: any) => void) | null>(null);
+  sketchE = signal<((p: any) => void) | null>(null);
   
   // Using viewChild signal for Angular 17+
   mainContainer = viewChild<ElementRef<HTMLElement>>('mainContainer');
@@ -264,9 +237,16 @@ export class App implements OnInit, AfterViewInit {
     }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     if (typeof window !== 'undefined') {
       this.windowWidth.set(window.innerWidth);
+
+      // Load the external sketch files
+      const sketchC = await this.sketchLoader.loadSketch('/sketches/Red_and_blue.js');
+      this.sketchC.set(sketchC);
+
+      const sketchE = await this.sketchLoader.loadSketch('/sketches/Lines_While.js');
+      this.sketchE.set(sketchE);
     }
   }
 

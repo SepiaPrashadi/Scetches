@@ -17,6 +17,10 @@ export class P5SketchComponent implements OnInit, OnDestroy {
     constructor(private elementRef: ElementRef) {}
 
     ngOnInit() {
+        if (typeof p5 === 'undefined') {
+            console.error('p5 is not defined. Make sure it is loaded in index.html');
+            return;
+        }
         const sketchFunc = this.sketch();
         const w = this.width();
         const h = this.height();
@@ -30,7 +34,11 @@ export class P5SketchComponent implements OnInit, OnDestroy {
             };
         };
 
-        this.p5Instance = new p5(wrappedSketch, this.elementRef.nativeElement);
+        try {
+            this.p5Instance = new p5(wrappedSketch, this.elementRef.nativeElement);
+        } catch (error) {
+            console.error('Error creating p5 instance:', error);
+        }
     }
 
     ngOnDestroy() {
